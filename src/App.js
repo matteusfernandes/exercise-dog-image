@@ -13,6 +13,7 @@ class App extends Component {
 
     this.fetchDogImage = this.fetchDogImage.bind(this);
     this.renderDogImage = this.renderDogImage.bind(this);
+    this.saveImages = this.saveImages.bind(this);
   }
 
   fetchDogImage = () => {
@@ -32,22 +33,39 @@ class App extends Component {
     return (
       <div>
         <img className="Image" src={this.state.dog} alt="A cute dog" />
-        <button onClick={this.fetchDogImage}>Mais um Doguinho</button>
+        <button onClick={this.saveImages}>Mais um Doguinho</button>
       </div>
     );
+  }
+
+  saveImages() {
+    this.setState(({ storedDogImages, dog }) => ({
+      storedDogImages: [...storedDogImages, dog]
+    }));
+
+    this.fetchDogImage();
   }
 
   componentDidMount() {
     this.fetchDogImage();
   }
 
-  // shouldComponentUpdate({ muser }) {
-  //   if (muser !== undefined) {
-  //     console.log('oi')
-  //     return muser.dob.age <= 50;
-  //   }
-  //   return true;
-  // }
+  shouldComponentUpdate() {
+    const { dog } = this.state;
+
+    if (dog !== '' && dog.includes('terrier')) {
+      return false;
+    }
+
+    return true;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.dog !== this.state.dog) {
+      const dogName = this.state.dog.split("/")[4];
+      alert(dogName);
+    }
+  }
 
   render() {
     const { loading } = this.state;
