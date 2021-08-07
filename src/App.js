@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 
+const NAMES_OF_DOGS = [];
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -9,11 +11,13 @@ class App extends Component {
       loading: true,
       dog: '',
       storedDogImages: [],
+      name: '',
     }
 
     this.fetchDogImage = this.fetchDogImage.bind(this);
     this.renderDogImage = this.renderDogImage.bind(this);
     this.saveImages = this.saveImages.bind(this);
+    this.saveNames = this.saveNames.bind(this);
   }
 
   fetchDogImage = () => {
@@ -29,11 +33,31 @@ class App extends Component {
     })
   }
 
+  saveNames() {
+    const { dog, name } = this.state;
+
+    NAMES_OF_DOGS.push([name, dog]);
+    console.log(NAMES_OF_DOGS)
+  }
+
   renderDogImage() {
     return (
       <div>
         <img className="Image" src={this.state.dog} alt="A cute dog" />
-        <button onClick={this.saveImages}>Mais um Doguinho</button>
+        <div>
+          <label htmlFor="dog-name">
+            Dê um nome para o doguinho:
+            <input
+              type="text"
+              name="dog-name"
+              onChange={e => this.setState({name: e.target.value})}
+            />
+          </label>
+          <div>
+            <button onClick={ this.saveNames }>Salvar Nome</button>
+            <button onClick={ this.saveImages }>Mais um Doguinho</button>
+          </div>
+        </div>
       </div>
     );
   }
